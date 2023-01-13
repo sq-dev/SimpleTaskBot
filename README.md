@@ -1,24 +1,29 @@
 ## Installation
 
 1. Clone the repository 
-
-   > git clone https://github.com/sq-dev/SimpleTaskBot.git
-
+```bash
+   git clone https://github.com/sq-dev/SimpleTaskBot.git
+```
 2. Navigate to the project directory
-   > cd chatbot-project
-
+```bash
+    cd chatbot-project
+```
 3. Install dependencies
-    >composer install
-
+```bash
+    composer install
+```
 4. Create a copy of the .env file and set your configuration
-   >cp .env.example .env
-
+```bash
+   cp .env.example .env
+```
 5. Generate an application key
-   >php artisan key:generate
-
+```bash
+   php artisan key:generate
+```
 6. Run the migrations
-   >php artisan migrate
-
+```bash
+   php artisan migrate
+```
 7. Obtain a Telegram token by talking to the [BotFather](https://telegram.me/botfather) and set it in your .env file as `TELEGRAM_TOKEN`
 
 ## Usage
