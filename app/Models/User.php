@@ -11,9 +11,11 @@ class User extends Authenticatable {
         'name',
         'telegram_id',
         'notifications',
+        'last_activity'
     ];
     protected $casts = [
         'notifications' => 'boolean',
+        'last_activity' => 'datetime'
     ];
 
     public function tasks(): HasMany {

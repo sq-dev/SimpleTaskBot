@@ -3,6 +3,7 @@
 namespace App\Telegram\Middleware;
 
 use App\Models\User;
+use Carbon\Carbon;
 use SergiX44\Nutgram\Nutgram;
 
 class RegisterUser
@@ -15,13 +16,17 @@ class RegisterUser
             User::create([
                 'telegram_id' => $bot->userId(),
                 'name' => $bot->user()->first_name. ' ' . $bot->user()->last_name,
+                'last_activity' => Carbon::now()
             ]);
 
             $bot->sendMessage(__('text.welcome', [
                 'name' => $bot->user()->first_name,
             ]));
+        }else{
+            $user->touch('last_activity');
         }
         app()->instance(User::class, $user);
+
 
         $next($bot);
     }

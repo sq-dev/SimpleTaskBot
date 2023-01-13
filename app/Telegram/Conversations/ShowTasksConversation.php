@@ -29,10 +29,10 @@ class ShowTasksConversation extends InlineMenu
         $user = app(User::class);
         $tasks = $user->tasks()
             ->orderBy('completed')
-            ->orderBy('created_at')
+            ->orderBy('created_at', 'desc')
             ->paginate(5, page: $page);
 
-        if ($tasks->count() < 1){
+        if ($tasks->count() < 1) {
             $this->bot->sendMessage(__('text.task.none'));
             return;
         }
@@ -41,12 +41,12 @@ class ShowTasksConversation extends InlineMenu
 
         foreach ($tasks as $task) {
             $name = $task->name;
-            if ($task->completed){
+            if ($task->completed) {
                 $name .= ' ✅';
             }
-            $this->addButtonRow(InlineKeyboardButton::make($name, callback_data: $task->id.'@showInfo'));
+            $this->addButtonRow(InlineKeyboardButton::make($name, callback_data: $task->id . '@showInfo'));
         }
-        if ($tasks->lastPage() > 1){
+        if ($tasks->lastPage() > 1) {
             $navButton = [];
             if ($tasks->currentPage() > 1) {
                 $navButton[] = InlineKeyboardButton::make(
@@ -95,7 +95,7 @@ class ShowTasksConversation extends InlineMenu
             $currentPage++;
         } elseif ($step === 'prev') {
             $currentPage--;
-        }else{
+        } else {
             $bot->answerCallbackQuery([
                 'text' => __('text.nothing'),
                 'show_alert' => true
@@ -122,22 +122,22 @@ class ShowTasksConversation extends InlineMenu
     public function showTaskInfo(Task $task): void
     {
         $this->clearButtons();
-        $this->menuText((string) view('ru.task', compact('task')), [
+        $this->menuText((string)view('ru.task', compact('task')), [
             'parse_mode' => ParseMode::HTML
         ]);
 
-        if($task->completed){
+        if ($task->completed) {
             $changeText = '✅';
-        }else{
+        } else {
             $changeText = '☑';
         }
 
         $this->addButtonRow(
-            InlineKeyboardButton::make($changeText, callback_data: $task->id.':update@changeStatus'),
-            InlineKeyboardButton::make(__('text.kbd.delete'), callback_data: $task->id.':delete@changeStatus')
+            InlineKeyboardButton::make($changeText, callback_data: $task->id . ':update@changeStatus'),
+            InlineKeyboardButton::make(__('text.kbd.delete'), callback_data: $task->id . ':delete@changeStatus')
         );
 
-        $this->addButtonRow(InlineKeyboardButton::make(__('text.kbd.back'), callback_data: $task->id.':back@changeStatus'));
+        $this->addButtonRow(InlineKeyboardButton::make(__('text.kbd.back'), callback_data: $task->id . ':back@changeStatus'));
 
         $this->showMenu();
     }
@@ -151,23 +151,29 @@ class ShowTasksConversation extends InlineMenu
 
         $task = Task::find($id);
 
-        if ($handle === 'back'){
+        if ($handle === 'back') {
             $this->showTasks($bot->getUserData('page'));
-        }elseif ($handle === 'delete'){
+        } elseif ($handle === 'delete') {
             $taskDeleted = $task?->delete();
             if ($taskDeleted) {
                 $bot->answerCallbackQuery([
                     'text' => __('text.task.deleted')
                 ]);
                 (new CancelHandler())($bot);
-            }else{
+            } else {
                 $bot->answerCallbackQuery([
                     'text' => __('text.task.deleted'),
                     'show_alert' => true
                 ]);
             }
-        }elseif($handle === 'update'){
+        } elseif ($handle === 'update') {
             $task->completed = !$task->completed;
+            if ($task->completed) {
+                $bot->answerCallbackQuery([
+                    'text' => __('text.task.congratulate'),
+                    'show_alert' => true
+                ]);
+            }
             $task->save();
             $this->showTaskInfo($task);
         }

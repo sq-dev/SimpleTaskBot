@@ -13,9 +13,12 @@ class Kernel extends ConsoleKernel
      * @param  \Illuminate\Console\Scheduling\Schedule  $schedule
      * @return void
      */
-    protected function schedule(Schedule $schedule)
+    protected function schedule(Schedule $schedule): void
     {
-        // $schedule->command('inspire')->hourly();
+        $schedule->command('check:activity')->dailyAt('8:00');
+//        $schedule->command('notify:users')->everyMinute();
+        $schedule->command('nutgram:run')
+            ->everyMinute();
     }
 
     /**
@@ -23,7 +26,7 @@ class Kernel extends ConsoleKernel
      *
      * @return void
      */
-    protected function commands()
+    protected function commands(): void
     {
         $this->load(__DIR__.'/Commands');
 

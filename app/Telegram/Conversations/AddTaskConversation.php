@@ -122,7 +122,7 @@ class AddTaskConversation extends InlineMenu
         }
         $date *= 24;
         $date = Carbon::now()->addHours($date);
-        $bot->setUserData('task.deadline', $date->toDateString());
+        $bot->setUserData('task.deadline', $date->toDateTime());
 
         $this->gotToDescription();
     }
