@@ -9,7 +9,7 @@ return [
 
     // Extra or specific configurations
     'config' => [
-        'timeout' => 30
+        'timeout' => 30,
     ],
 
     // Set if the service provider should automatically load
@@ -24,4 +24,10 @@ return [
 
     // Set log channel
     'log_channel' => env('TELEGRAM_LOG_CHANNEL', 'null'),
+
+    // Set admin id
+    'admin_id' => env('TELEGRAM_ADMIN_ID'),
+
+    // Set channel id
+    'channel_id' => env('TELEGRAM_CHANNEL_ID'),
 ];

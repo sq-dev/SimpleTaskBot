@@ -16,9 +16,8 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule): void
     {
         $schedule->command('check:activity')->dailyAt('8:00');
-//        $schedule->command('notify:users')->everyMinute();
-        $schedule->command('nutgram:run')
-            ->everyMinute();
+        $schedule->command('notify:users')->everyMinute();
+
     }
 
     /**

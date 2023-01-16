@@ -2,7 +2,10 @@
 
 namespace App\Console\Commands;
 
+use App\Models\Task;
 use App\Models\User;
+use App\Telegram\Conversations\ShowTasksConversation;
+use Carbon\Carbon;
 use Illuminate\Console\Command;
 use SergiX44\Nutgram\Nutgram;
 
@@ -21,13 +24,34 @@ class NotifyUsersCommand extends Command
 
     public function handle(): void
     {
-        User::chunk(100, function ($users){
-            /** @var User $user */
-            foreach ($users as $user){
-                $this->bot->sendMessage(__('text.come_back'), [
-                    'chat_id' => $user->telegram_id
-                ]);
-            }
-        });
+        User::where('notifications', true)
+            ->with('tasks')
+            ->chunk(100, function ($users){
+                /** @var User $user */
+                foreach ($users as $user){
+                    if (!$user->notifications) {
+                        continue;
+                    }
+
+                    $uncheckedTasks = $user->tasks()
+                        ->where('completed', false);
+                    $count = 0;
+                    foreach ($uncheckedTasks->get() as $task) {
+                        $deadline = Carbon::parse($task->deadline);
+                        $now = Carbon::now();
+                        $diff = $deadline->diffInMinutes($now);
+                        if ($diff === 0) {
+                            $count++;
+                        }
+                    }
+                    if ($count > 0) {
+                        $this->bot->sendMessage(__('text.task.send_users', [
+                            'count' => $count,
+                        ]), [
+                            'chat_id' => $user->telegram_id,
+                        ]);
+                    }
+                }
+            });
     }
 }
