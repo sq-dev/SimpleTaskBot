@@ -2,9 +2,7 @@
 
 namespace App\Console\Commands;
 
-use App\Models\Task;
 use App\Models\User;
-use App\Telegram\Conversations\ShowTasksConversation;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
 use SergiX44\Nutgram\Nutgram;
@@ -20,15 +18,15 @@ class NotifyUsersCommand extends Command
 
     protected $signature = 'notify:users';
 
-    protected $description = 'Command send photo to users every morning';
+    protected $description = 'Command check tasks time and notify users';
 
     public function handle(): void
     {
         User::where('notifications', true)
             ->with('tasks')
-            ->chunk(100, function ($users){
+            ->chunk(100, function ($users) {
                 /** @var User $user */
-                foreach ($users as $user){
+                foreach ($users as $user) {
                     if (!$user->notifications) {
                         continue;
                     }
