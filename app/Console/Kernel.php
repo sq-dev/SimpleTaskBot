@@ -15,6 +15,7 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule): void
     {
+        $schedule->command('check:old-tasks')->dailyAt('00:00');
         $schedule->command('check:old-users')->dailyAt('8:00');
         $schedule->command('notify:users')->everyMinute();
 
