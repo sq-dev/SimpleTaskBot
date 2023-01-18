@@ -132,14 +132,16 @@ class AddTaskConversation extends InlineMenu
      */
     public function setDeadlineDaily(Nutgram $bot): void
     {
+        $time = $bot->message()?->text;
         try {
-            Carbon::createFromFormat('H:i', $bot->message()?->text);
+            Carbon::createFromFormat('H:i', $time);
+            Carbon::parse($time);
         } catch (InvalidFormatException) {
             $bot->sendMessage(__('text.invalid_format'));
             return;
         }
 
-        $bot->setUserData('task.deadline', $bot->message()->text);
+        $bot->setUserData('task.deadline', $time);
 
         $this->gotToDescription();
     }
