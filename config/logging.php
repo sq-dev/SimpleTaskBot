@@ -78,6 +78,13 @@ return [
             'level' => env('LOG_LEVEL', 'critical'),
         ],
 
+        'telegram' => [
+            'driver' => 'custom',
+            'via' => \SergiX44\Nutgram\Laravel\Log\NutgramLogger::class,
+            'level' => 'debug',
+            'chat_id' => env('NUTGRAM_LOG_CHAT_ID'), // any chat_id where bot can write messages
+        ],
+
         'papertrail' => [
             'driver' => 'monolog',
             'level' => env('LOG_LEVEL', 'debug'),
