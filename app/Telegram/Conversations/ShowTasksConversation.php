@@ -162,15 +162,18 @@ class ShowTasksConversation extends InlineMenu
                 (new CancelHandler())($bot);
             } else {
                 $bot->answerCallbackQuery([
-                    'text' => __('text.task.deleted'),
+                    'text' => __('text.unknown_error'),
                     'show_alert' => true
                 ]);
             }
         } elseif ($handle === 'update') {
             $task->completed = !$task->completed;
             if ($task->completed) {
+                $count = $task->where('completed', false)->count();
                 $bot->answerCallbackQuery([
-                    'text' => __('text.task.congratulate'),
+                    'text' => __('text.task.congratulate', [
+                        'count' => $count
+                    ]),
                     'show_alert' => true
                 ]);
             }
