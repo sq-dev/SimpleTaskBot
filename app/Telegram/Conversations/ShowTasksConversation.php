@@ -150,6 +150,7 @@ class ShowTasksConversation extends InlineMenu
         [$id, $handle] = explode(':', $data);
 
         $task = Task::find($id);
+        $user = app(User::class);
 
         if ($handle === 'back') {
             $this->showTasks($bot->getUserData('page'));
@@ -167,9 +168,11 @@ class ShowTasksConversation extends InlineMenu
                 ]);
             }
         } elseif ($handle === 'update') {
-            $task->completed = !$task->completed;
+            $task->update([
+                'completed' => !$task->completed
+            ]);
             if ($task->completed) {
-                $count = $task->where('completed', false)->count();
+                $count = $user->tasks->where('completed', false)->count();
                 $bot->answerCallbackQuery([
                     'text' => __('text.task.congratulate', [
                         'count' => $count
@@ -177,7 +180,6 @@ class ShowTasksConversation extends InlineMenu
                     'show_alert' => true
                 ]);
             }
-            $task->save();
             $this->showTaskInfo($task);
         }
     }

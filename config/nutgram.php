@@ -10,7 +10,6 @@ return [
     // Extra or specific configurations
     'config' => [
         'timeout' => 30,
-        'split_long_messages' => true
     ],
 
     // Set if the service provider should automatically load
