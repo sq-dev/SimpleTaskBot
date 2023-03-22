@@ -10,10 +10,10 @@ on:
 jobs:
   deployment:
     runs-on: [self-hosted, hiplet-2973]
-    environment: "production"
+    environment: "prod"
     steps:
       - name: "Deploy"
         run: |
           cd ${{secrets.PROJECT_PATH}}
           git pull origin main
-          sudo -u www-data /bin/bash deploy.sh
+          /bin/bash deploy.sh

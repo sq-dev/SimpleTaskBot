@@ -10,7 +10,7 @@ cd chatbot-project
 ```
 3. Install dependencies
 ```bash
-composer install
+composer install --prefer-dist --no-dev
 ```
 4. Create a copy of the .env file and set your configuration
 ```bash
@@ -39,6 +39,10 @@ php artisan migrate
    This command will create a webhook endpoint in your application that Telegram can use to send updates to your chatbot. You will need to configure your web server to forward incoming requests to this endpoint.
 
 3. You can also configure the chatbot to work with NutGram by following the instructions [here](https://github.com/nutgram/nutgram)
+
+## Example
+
+>Example bot - [Simple Task Manager](https://t.me/SimpleTaskManagerBot)
 
 ## Additional Resources
 
