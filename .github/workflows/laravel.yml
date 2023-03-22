@@ -2,14 +2,15 @@ name: Deploy to prod server
 
 on:
   push:
-    branches:
-      - "main"
+    branches: [ "main" ]
     paths-ignore:
       - ".github/workflows/**"
+  pull_request:
+    branches: [ "main" ]
 
 jobs:
   deployment:
-    runs-on: [self-hosted, hiplet-2973]
+    runs-on: [self-hosted]
     environment: "prod"
     steps:
       - name: "Deploy"
