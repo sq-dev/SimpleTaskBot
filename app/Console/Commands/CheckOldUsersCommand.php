@@ -23,8 +23,7 @@ class CheckOldUsersCommand extends Command
 
     public function handle(): void
     {
-        User::where('last_activity', '<', now()->subDays(2))
-            ->orWhere('last_activity', '<', now()->subDays(5))
+        User::whereDate('last_activity', '=', now()->subDays(5))
             ->chunk(100, function (Collection $users) {
                 foreach ($users as $user) {
                     /* @var User $user */

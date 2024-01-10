@@ -173,12 +173,20 @@ class ShowTasksConversation extends InlineMenu
             ]);
             if ($task->completed) {
                 $count = $user->tasks->where('completed', false)->count();
-                $bot->answerCallbackQuery([
-                    'text' => __('text.task.congratulate', [
-                        'count' => $count
-                    ]),
-                    'show_alert' => true
-                ]);
+                if ($count > 0){
+                    $bot->answerCallbackQuery([
+                        'text' => __('text.task.congratulate', [
+                            'count' => $count
+                        ]),
+                        'show_alert' => true
+                    ]);
+                } else {
+                    $bot->answerCallbackQuery([
+                        'text' => __('text.task.is_over'),
+                        'show_alert' => true
+                    ]);
+                }
+
             }
             $this->showTaskInfo($task);
         }

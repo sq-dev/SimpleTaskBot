@@ -14,21 +14,6 @@ class ShowProfileConversation extends InlineMenu
     /**
      * @throws InvalidArgumentException
      */
-    public function start(Nutgram $bot)
-    {
-        $user = app(User::class);
-        $status = $user->notifications ? '✅' : '☑';
-        $this->menuText('Profile')
-            ->addButtonRow(
-                InlineKeyboardButton::make(__('text.kbd.notification', [
-                    'status' => $status
-                ]), callback_data: 'some@notify')
-            )->showMenu();
-    }
-
-    /**
-     * @throws InvalidArgumentException
-     */
     public function notify(Nutgram $bot): void
     {
         $user = app(User::class);
@@ -38,5 +23,27 @@ class ShowProfileConversation extends InlineMenu
 
         $this->clearButtons();
         $this->start($bot);
+    }
+
+    /**
+     * @throws InvalidArgumentException
+     */
+    public function start(Nutgram $bot)
+    {
+        $user = app(User::class);
+        $tasks = $user->tasks();
+        $profile = __('text.profile', [
+            'id' => $bot->userId(),
+            'date' => $user->created_at->format('d.m.Y'),
+            'total' => $tasks->count(),
+            'done' => $tasks->where('completed', true)->count(),
+            'left' => $tasks->where('completed', false)->count(),
+        ]);
+        $this->menuText($profile)
+            ->addButtonRow(
+                InlineKeyboardButton::make(__('text.kbd.notification', [
+                    'status' => $user->notifications ? '✅' : '☑',
+                ]), callback_data: 'some@notify')
+            )->showMenu();
     }
 }

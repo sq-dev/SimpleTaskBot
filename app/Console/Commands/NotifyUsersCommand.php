@@ -27,10 +27,6 @@ class NotifyUsersCommand extends Command
             ->chunk(100, function ($users) {
                 /** @var User $user */
                 foreach ($users as $user) {
-                    if (!$user->notifications) {
-                        continue;
-                    }
-
                     $uncheckedTasks = $user->tasks()
                         ->where('completed', false);
                     $count = 0;
