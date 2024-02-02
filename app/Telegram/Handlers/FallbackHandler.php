@@ -8,10 +8,14 @@ use Throwable;
 
 class FallbackHandler
 {
-    public function __invoke(Nutgram $bot, AiService $aiService): void
+    public function __construct(protected AiService $aiService)
+    {
+    }
+
+    public function __invoke(Nutgram $bot): void
     {
         try {
-            $text = $aiService->complete($bot->message()->text, [
+            $text = $this->aiService->complete($bot->message()->text, [
                 'name' => $bot->user()->first_name,
                 'id' => $bot->userId()
             ]);
