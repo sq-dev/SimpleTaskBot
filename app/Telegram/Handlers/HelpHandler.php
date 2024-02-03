@@ -18,10 +18,7 @@ class HelpHandler
         try {
             $bot->sendChatAction(ChatActions::TYPING);
 
-            $text = $this->aiService->complete($bot->message()->text, [
-                'name' => $bot->user()->first_name,
-                'id' => $bot->userId()
-            ]);
+            $text = $this->aiService->completeCommand($bot->message()->text);
 
             $bot->sendMessage($text);
         } catch (Throwable) {

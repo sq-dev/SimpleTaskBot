@@ -75,6 +75,32 @@ class AiService
         return $answer;
     }
 
+    /**
+     * @throws GuzzleException
+     * @throws \JsonException
+     */
+    public function completeCommand(string $text): string
+    {
+        $response = $this->client->post('/v1/chat/completions', [
+            'json' => [
+                'model' => self::MODEL,
+                'stream' => false,
+                'messages' => [
+                    [
+                        'role' => 'system',
+                        'content' => 'Представь что ты телеграм бот созданный для напоминания задачи, сейчас пользователь хочет выполнить команду в боте, нужно ответить ему как бот'
+                    ],
+                    [
+                        'role' => 'user',
+                        'content' => $text
+                    ]
+                ]
+            ]
+        ]);
+
+       return json_decode($response->getBody()->getContents(), true, 512, JSON_THROW_ON_ERROR)['choices']['0']['message']['content'];
+    }
+
     public function getChatHistory(int $id): array
     {
         return Cache::get('dialogs'.$id, []);
