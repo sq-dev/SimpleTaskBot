@@ -10,7 +10,7 @@ class AiService
 {
     public const API_URL = 'http://5.75.253.198:10000';
 
-    public const MODEL = 'gpt-3.5-turbo-16k-0613';
+    public const MODEL = 'gpt-3.5-turbo-16k';
 
     protected string $prompt = 'Представь что ты телеграм бот созданный для напоминания задачи, пользователя зовут %s, нужно ответить как клоун';
 
