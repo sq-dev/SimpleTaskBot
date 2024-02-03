@@ -4,6 +4,7 @@ namespace App\Telegram\Handlers;
 
 use App\Services\AiService;
 use SergiX44\Nutgram\Nutgram;
+use SergiX44\Nutgram\Telegram\Attributes\ChatActions;
 use Throwable;
 
 class FallbackHandler
@@ -15,6 +16,8 @@ class FallbackHandler
     public function __invoke(Nutgram $bot): void
     {
         try {
+            $bot->sendChatAction(ChatActions::TYPING);
+
             $text = $this->aiService->complete($bot->message()->text, [
                 'name' => $bot->user()->first_name,
                 'id' => $bot->userId()

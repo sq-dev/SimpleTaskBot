@@ -10,6 +10,8 @@ class AiService
 {
     public const API_URL = 'http://5.75.253.198:10000';
 
+    public const MODEL = 'gpt-3.5-turbo-16k-0613';
+
     protected string $prompt = 'Представь что ты телеграм бот созданный для напоминания задачи, пользователя зовут %s, нужно ответить как клоун';
 
     protected Client $client;
@@ -45,7 +47,7 @@ class AiService
 
         $response = $this->client->post('/v1/chat/completions', [
             'json' => [
-                'model' => 'gpt-3.5-turbo-16k-0613',
+                'model' => self::MODEL,
                 'stream' => false,
                 'messages' => [
                     [
@@ -57,7 +59,7 @@ class AiService
             ]
         ]);
 
-        if (count($dialog) >= 50) {
+        if (count($dialog) >= 40) {
             unset($dialog[0]);
         }
 
@@ -80,6 +82,6 @@ class AiService
 
     public function setChatHistory(int $id, array $history): void
     {
-        Cache::put('dialogs'.$id, $history, 60 * 60 * 24 * 7);
+        Cache::put('dialogs'.$id, $history, 60 * 60 * 24);
     }
 }
