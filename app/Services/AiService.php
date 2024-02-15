@@ -12,7 +12,7 @@ class AiService
 
     public const MODEL = 'gpt-3.5-turbo-16k';
 
-    protected string $prompt = 'Представь что ты телеграм бот созданный для напоминания задачи, пользователя зовут %s, нужно ответить как клоун';
+    protected string $prompt = 'Представь что ты телеграм бот созданный для напоминания задачи, пользователя зовут %s, нужно ответить как ученый';
 
     protected Client $client;
 
